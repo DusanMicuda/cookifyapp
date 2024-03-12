@@ -1,4 +1,4 @@
-package com.micudasoftware.cookifyapp.ui.theme
+package com.micudasoftware.presentation.common.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

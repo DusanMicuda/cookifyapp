@@ -1,4 +1,4 @@
-package com.micudasoftware.cookifyapp.ui.theme
+package com.micudasoftware.presentation.common.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF306A42)
