@@ -54,6 +54,8 @@ android {
 
 dependencies {
     implementation(project(":presentation"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
 
     //Hilt
     implementation(libs.hilt.android)
