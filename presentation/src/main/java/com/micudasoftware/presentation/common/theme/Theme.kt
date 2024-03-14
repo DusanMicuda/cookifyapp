@@ -2,6 +2,7 @@ package com.micudasoftware.presentation.common.theme
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -112,3 +113,18 @@ fun CookifyAppTheme(
   )
 }
 
+/**
+ * Theme for composable previews.
+ *
+ * @param content The preview content.
+ */
+@Composable
+fun PreviewTheme(content: @Composable () -> Unit) {
+    CookifyAppTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            content()
+        }
+    }
+}

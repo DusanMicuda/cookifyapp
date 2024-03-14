@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cookify App</string>
+    <string name="app_description">Discover and share delicious recipes with the cookify community.</string>
+    <string name="label_full_name">Full Name</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_password">Password</string>
+    <string name="button_login">Log In</string>
+    <string name="button_signup">Sign Up</string>
+    <string name="text_dont_have_account">Don\'t have an account ?</string>
+    <string name="text_create_account">Create an account.</string>
+    <string name="text_already_have_account">Already have an account ?</string>
+    <string name="text_login">Log In.</string>
+    <string name="text_field_required">Field is required !</string>
+    <string name="text_wrong_email">Wrong email !</string>
+    <string name="text_weak_password">Weak password !</string>
+</resources>
