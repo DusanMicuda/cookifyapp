@@ -47,6 +47,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -64,14 +65,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-
-    // Compose Destinations
-    implementation(libs.compose.destinations.core)
-    ksp(libs.compose.destinations.compiler)
-
+    // Android
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -80,6 +74,19 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // Compose Destinations
+    implementation(libs.compose.destinations.core)
+    ksp(libs.compose.destinations.compiler)
+
+    // Other
+    implementation(libs.timber)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
