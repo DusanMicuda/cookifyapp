@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -26,6 +27,7 @@ class OnboardingViewModel @Inject constructor(
     override val viewState = _viewState.asStateFlow()
 
     override fun onEvent(event: OnboardingEvent) {
+        Timber.d("onEvent($event)")
         when(event) {
             is OnboardingEvent.ChangeEmail -> changeEmail(event.email)
             is OnboardingEvent.ChangeName -> changeName(event.name)
@@ -179,6 +181,7 @@ class OnboardingViewModel @Inject constructor(
      * Function to login user if the form is valid.
      */
     private fun login() {
+        Timber.d("login()")
         validateForm()
         if (!isFormValid()) {
             return
@@ -192,6 +195,7 @@ class OnboardingViewModel @Inject constructor(
             ).onSuccess {
                 // Todo navigate to feed
             }.onError {
+                Timber.e(it.throwable, "Login Failed: ${it.code} - ${it.message}")
                 // Todo show error dialog
             }.onFinished {
                 _viewState.update { it.copy(isLoading = false) }
@@ -203,6 +207,7 @@ class OnboardingViewModel @Inject constructor(
      * Function to sign up user if the form is valid.
      */
     private fun signUp() {
+        Timber.d("signUp()")
         validateForm()
         if (!isFormValid()) {
             return
@@ -222,6 +227,7 @@ class OnboardingViewModel @Inject constructor(
             }.onSuccess {
                 // Todo navigate to setup profile
             }.onError {
+                Timber.e(it.throwable, "Sign Up failed: ${it.code} - ${it.message}")
                 // Todo show error dialog
             }.onFinished {
                 _viewState.update { it.copy(isLoading = false) }

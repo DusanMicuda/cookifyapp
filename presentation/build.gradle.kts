@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.compose.destinations.core)
     ksp(libs.compose.destinations.compiler)
 
+    // Other
+    implementation(libs.timber)
+
     // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
