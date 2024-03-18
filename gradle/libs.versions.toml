@@ -11,6 +11,7 @@ activity-compose = "1.7.0"
 compose-bom = "2024.02.02"
 jetbrains-kotlin-jvm = "1.9.0"
 security-crypto = "1.1.0-alpha06"
+splash = "1.0.1"
 
 # Third-party
 retrofit = "2.9.0"
@@ -30,6 +31,7 @@ espresso-core = "3.5.1"
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
+androidx-splash = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
 
 # Lifecycle runtime
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime" }
