@@ -4,6 +4,7 @@ import com.micudasoftware.data.user.api.dto.LoginRequestDto
 import com.micudasoftware.data.user.api.dto.SignUpRequestDto
 import com.micudasoftware.data.user.datasource.UserLocalDataSource
 import com.micudasoftware.data.user.datasource.UserRemoteDataSource
+import com.micudasoftware.data.user.datasource.model.UserCredentials
 import com.micudasoftware.domain.common.Result
 import com.micudasoftware.domain.user.repository.UserRepository
 import javax.inject.Inject
@@ -27,6 +28,7 @@ class UserRepositoryImpl @Inject constructor(
         userRemoteDataSource.login(LoginRequestDto(email, password))
             .onSuccess {
                 userLocalDataSource.saveAuthorizationToken(it.token)
+                userLocalDataSource.saveCredentials(UserCredentials(email, password))
             }.map {}
 
 
@@ -34,6 +36,17 @@ class UserRepositoryImpl @Inject constructor(
         userRemoteDataSource.signUp(SignUpRequestDto(name, email, password))
 
     override suspend fun authenticate(): Result<Unit> =
-        userRemoteDataSource.authenticate()
+        if (userLocalDataSource.isLoggedIn()) {
+            userRemoteDataSource.authenticate()
+        } else {
+            Result.Error(message = "User isn't logged in!")
+        }
 
+
+    override suspend fun autoLogin(): Result<Unit> =
+        authenticate().chainError {
+            userLocalDataSource.getCredentials()?.let { credentials ->
+                login(credentials.login, credentials.password)
+            } ?: it
+        }
 }

@@ -39,4 +39,11 @@ interface UserRepository {
      * @return The empty [Result].
      */
     suspend fun authenticate(): Result<Unit>
+
+    /**
+     * Function authenticate and automatic login user with saved credentials.
+     *
+     * @return The empty [Result].
+     */
+    suspend fun autoLogin(): Result<Unit>
 }

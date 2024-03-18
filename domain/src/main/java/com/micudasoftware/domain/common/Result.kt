@@ -89,4 +89,17 @@ sealed class Result<T> {
             is Error -> Error(this.code, this.message, this.throwable)
         }
     }
+
+/**
+     * Inline function to chain another operation if the [Result] was [Error].
+     *
+     * @param chainAction Lambda function to chain another operation.
+     * @return The [Result] of the [chainAction] if first operation was [Error], otherwise [Success].
+     */
+    inline fun chainError(chainAction: (Error<T>) -> Result<T>): Result<T> {
+        return when (this) {
+            is Success -> this
+            is Error -> chainAction(this)
+        }
+    }
 }
