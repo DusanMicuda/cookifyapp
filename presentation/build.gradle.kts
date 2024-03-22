@@ -41,6 +41,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
     }
+    ksp {
+        arg("compose-destinations.codeGenPackageName", "com.micudasoftware.presentation.navigation")
+    }
 }
 
 dependencies {

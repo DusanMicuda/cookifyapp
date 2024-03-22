@@ -1,4 +1,4 @@
-package com.micudasoftware.presentation.onboarding
+package com.micudasoftware.presentation.onboarding.loginsignup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,23 +19,23 @@ import javax.inject.Inject
  * @property userRepository The repository for user data and operations.
  */
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
+class LoginSignUpViewModel @Inject constructor(
     private val userRepository: UserRepository,
-) : ViewModel(), ComposeViewModel<OnboardingViewState, OnboardingEvent> {
+) : ViewModel(), ComposeViewModel<LoginSignUpViewState, LoginSignUpEvent> {
 
-    private val _viewState = MutableStateFlow(OnboardingViewState())
+    private val _viewState = MutableStateFlow(LoginSignUpViewState())
     override val viewState = _viewState.asStateFlow()
 
-    override fun onEvent(event: OnboardingEvent) {
+    override fun onEvent(event: LoginSignUpEvent) {
         Timber.d("onEvent($event)")
         when(event) {
-            is OnboardingEvent.ChangeEmail -> changeEmail(event.email)
-            is OnboardingEvent.ChangeName -> changeName(event.name)
-            is OnboardingEvent.ChangePassword -> changePassword(event.password)
-            OnboardingEvent.Login -> login()
-            OnboardingEvent.SignUp -> signUp()
-            OnboardingEvent.SwitchToLogin -> switchScreen(OnboardingScreenState.Login)
-            OnboardingEvent.SwitchToSignUp -> switchScreen(OnboardingScreenState.SignUp)
+            is LoginSignUpEvent.ChangeEmail -> changeEmail(event.email)
+            is LoginSignUpEvent.ChangeName -> changeName(event.name)
+            is LoginSignUpEvent.ChangePassword -> changePassword(event.password)
+            LoginSignUpEvent.Login -> login()
+            LoginSignUpEvent.SignUp -> signUp()
+            LoginSignUpEvent.SwitchToLogin -> switchScreen(LoginSignUpScreenState.Login)
+            LoginSignUpEvent.SwitchToSignUp -> switchScreen(LoginSignUpScreenState.SignUp)
         }
     }
 
@@ -101,7 +101,7 @@ class OnboardingViewModel @Inject constructor(
      *
      * @param state The new state.
      */
-    private fun switchScreen(state: OnboardingScreenState) =
+    private fun switchScreen(state: LoginSignUpScreenState) =
         _viewState.update {
             it.copy(
                 name = it.name.copy(error = null),
@@ -120,7 +120,7 @@ class OnboardingViewModel @Inject constructor(
     private fun getNameValidationError(
         name: String = viewState.value.name.value
     ): Int? = when {
-        name.isBlank() && viewState.value.screenState == OnboardingScreenState.SignUp ->
+        name.isBlank() && viewState.value.screenState == LoginSignUpScreenState.SignUp ->
             R.string.text_field_required
         else -> null
     }
@@ -149,7 +149,7 @@ class OnboardingViewModel @Inject constructor(
         password: String = viewState.value.password.value
     ): Int? = when {
         password.isBlank() -> R.string.text_field_required
-        !password.matches(Regex(PASSWORD_REGEX)) && viewState.value.screenState == OnboardingScreenState.SignUp ->
+        !password.matches(Regex(PASSWORD_REGEX)) && viewState.value.screenState == LoginSignUpScreenState.SignUp ->
             R.string.text_weak_password
         else -> null
     }

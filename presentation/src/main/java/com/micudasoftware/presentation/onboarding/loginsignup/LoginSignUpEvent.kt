@@ -1,50 +1,50 @@
-package com.micudasoftware.presentation.onboarding
+package com.micudasoftware.presentation.onboarding.loginsignup
 
 import com.micudasoftware.presentation.common.UIEvent
 
 /**
- * Events for Onboarding screen.
+ * Events for LoginSignUpScreen.
  */
-sealed class OnboardingEvent: UIEvent() {
+sealed class LoginSignUpEvent: UIEvent() {
 
     /**
      * Event to change name value.
      *
      * @property name The changed name.
      */
-    data class ChangeName(val name: String): OnboardingEvent()
+    data class ChangeName(val name: String): LoginSignUpEvent()
 
     /**
      * Event to change email value.
      *
      * @property email The changed email.
      */
-    data class ChangeEmail(val email: String): OnboardingEvent()
+    data class ChangeEmail(val email: String): LoginSignUpEvent()
 
     /**
      * Event to Change password value.
      *
      * @property password The changed password.
      */
-    data class ChangePassword(val password: String): OnboardingEvent()
+    data class ChangePassword(val password: String): LoginSignUpEvent()
 
     /**
      * Event to login user.
      */
-    data object Login: OnboardingEvent()
+    data object Login: LoginSignUpEvent()
 
     /**
      * Event to sign up user.
      */
-    data object SignUp: OnboardingEvent()
+    data object SignUp: LoginSignUpEvent()
 
     /**
      * Event to switch screen state to login.
      */
-    data object SwitchToLogin: OnboardingEvent()
+    data object SwitchToLogin: LoginSignUpEvent()
 
     /**
      * Event to switch screen state to sign up.
      */
-    data object SwitchToSignUp: OnboardingEvent()
+    data object SwitchToSignUp: LoginSignUpEvent()
 }

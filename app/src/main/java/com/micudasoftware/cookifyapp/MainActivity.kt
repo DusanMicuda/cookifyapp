@@ -10,8 +10,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.micudasoftware.presentation.common.theme.CookifyAppTheme
-import com.micudasoftware.presentation.onboarding.ui.NavGraphs
-import com.micudasoftware.presentation.onboarding.ui.destinations.OnboardingScreenDestination
+import com.micudasoftware.presentation.navigation.NavGraphs
+import com.micudasoftware.presentation.navigation.destinations.LoginSignUpScreenDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var startScreen = OnboardingScreenDestination
+        var startScreen = LoginSignUpScreenDestination
         installSplashScreen().apply {
             setKeepOnScreenCondition { viewModel.isLoading.value }
             setOnExitAnimationListener {

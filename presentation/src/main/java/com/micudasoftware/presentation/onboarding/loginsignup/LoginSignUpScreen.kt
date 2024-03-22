@@ -1,4 +1,4 @@
-package com.micudasoftware.presentation.onboarding.ui
+package com.micudasoftware.presentation.onboarding.loginsignup
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -36,26 +36,22 @@ import com.micudasoftware.presentation.common.PreviewViewModel
 import com.micudasoftware.presentation.common.component.ValidatedTextField
 import com.micudasoftware.presentation.common.padding
 import com.micudasoftware.presentation.common.theme.PreviewTheme
-import com.micudasoftware.presentation.onboarding.OnboardingEvent
-import com.micudasoftware.presentation.onboarding.OnboardingScreenState
-import com.micudasoftware.presentation.onboarding.OnboardingViewModel
-import com.micudasoftware.presentation.onboarding.OnboardingViewState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 
 /**
- * Screen for login or register user.
+ * Screen for login or sign up user.
  *
- * @param viewModel The [OnboardingViewModel] represented as [ComposeViewModel].
+ * @param viewModel The [LoginSignUpViewModel] represented as [ComposeViewModel].
  * @param navigator The [DestinationsNavigator].
  */
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun OnboardingScreen(
-    viewModel: ComposeViewModel<OnboardingViewState, OnboardingEvent> = hiltViewModel<OnboardingViewModel>(),
+fun LoginSignUpScreen(
+    viewModel: ComposeViewModel<LoginSignUpViewState, LoginSignUpEvent> = hiltViewModel<LoginSignUpViewModel>(),
     navigator: DestinationsNavigator,
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -91,7 +87,7 @@ fun OnboardingScreen(
             verticalArrangement = Arrangement.Center
         ) {
             AnimatedVisibility(
-                visible = viewState.screenState == OnboardingScreenState.SignUp,
+                visible = viewState.screenState == LoginSignUpScreenState.SignUp,
                 enter = slideInVertically(),
                 exit = slideOutVertically(),
             ) {
@@ -101,7 +97,7 @@ fun OnboardingScreen(
                     value = viewState.name.value,
                     error = viewState.name.error?.let { stringResource(it) },
                     singleLine = true,
-                    onValueChange = { viewModel.onEvent(OnboardingEvent.ChangeName(it)) },
+                    onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeName(it)) },
                     keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 )
             }
@@ -113,7 +109,7 @@ fun OnboardingScreen(
                 value = viewState.email.value,
                 error = viewState.email.error?.let { stringResource(it) },
                 singleLine = true,
-                onValueChange = { viewModel.onEvent(OnboardingEvent.ChangeEmail(it)) },
+                onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeEmail(it)) },
                 keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             )
@@ -125,7 +121,7 @@ fun OnboardingScreen(
                 value = viewState.password.value,
                 error = viewState.password.error?.let { stringResource(it) },
                 singleLine = true,
-                onValueChange = { viewModel.onEvent(OnboardingEvent.ChangePassword(it)) },
+                onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangePassword(it)) },
                 keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
@@ -136,8 +132,8 @@ fun OnboardingScreen(
                 onClick = {
                     viewModel.onEvent(
                         when(viewState.screenState) {
-                            OnboardingScreenState.Login -> OnboardingEvent.Login
-                            OnboardingScreenState.SignUp -> OnboardingEvent.SignUp
+                            LoginSignUpScreenState.Login -> LoginSignUpEvent.Login
+                            LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SignUp
                         }
                     )
                 }
@@ -145,8 +141,8 @@ fun OnboardingScreen(
                 Text(
                     text = stringResource(
                         when(viewState.screenState) {
-                            OnboardingScreenState.Login -> R.string.button_login
-                            OnboardingScreenState.SignUp -> R.string.button_signup
+                            LoginSignUpScreenState.Login -> R.string.button_login
+                            LoginSignUpScreenState.SignUp -> R.string.button_signup
                         }
                     )
                 )
@@ -155,8 +151,8 @@ fun OnboardingScreen(
                 Text(
                     text = stringResource(
                         when (viewState.screenState) {
-                            OnboardingScreenState.Login -> R.string.text_dont_have_account
-                            OnboardingScreenState.SignUp -> R.string.text_already_have_account
+                            LoginSignUpScreenState.Login -> R.string.text_dont_have_account
+                            LoginSignUpScreenState.SignUp -> R.string.text_already_have_account
                         }
                     ),
                     style = MaterialTheme.typography.labelLarge
@@ -167,15 +163,15 @@ fun OnboardingScreen(
                         .clickable {
                             viewModel.onEvent(
                                 when (viewState.screenState) {
-                                    OnboardingScreenState.Login -> OnboardingEvent.SwitchToSignUp
-                                    OnboardingScreenState.SignUp -> OnboardingEvent.SwitchToLogin
+                                    LoginSignUpScreenState.Login -> LoginSignUpEvent.SwitchToSignUp
+                                    LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SwitchToLogin
                                 }
                             )
                         },
                     text = stringResource(
                         when (viewState.screenState) {
-                            OnboardingScreenState.Login -> R.string.text_create_account
-                            OnboardingScreenState.SignUp -> R.string.text_login
+                            LoginSignUpScreenState.Login -> R.string.text_create_account
+                            LoginSignUpScreenState.SignUp -> R.string.text_login
                         }
                     ),
                     style = MaterialTheme.typography.labelLarge,
@@ -187,31 +183,31 @@ fun OnboardingScreen(
 }
 
 /**
- * Preview for [OnboardingScreen] in login state.
+ * Preview for [LoginSignUpScreen] in login state.
  */
 @Preview(device = "id:pixel")
 @Preview
 @Composable
-private fun OnboardingLoginScreenPreview() {
+private fun LoginScreenPreview() {
     PreviewTheme {
-        OnboardingScreen(
-            viewModel = PreviewViewModel(OnboardingViewState()),
+        LoginSignUpScreen(
+            viewModel = PreviewViewModel(LoginSignUpViewState()),
             navigator = EmptyDestinationsNavigator
         )
     }
 }
 
 /**
- * Preview for [OnboardingScreen] in sign up state.
+ * Preview for [LoginSignUpScreen] in sign up state.
  */
 @Preview(device = "id:pixel")
 @Preview
 @Composable
-private fun OnboardingSignUpScreenPreview() {
+private fun SignUpScreenPreview() {
     PreviewTheme {
-        OnboardingScreen(
+        LoginSignUpScreen(
             viewModel = PreviewViewModel(
-                OnboardingViewState(screenState = OnboardingScreenState.SignUp)
+                LoginSignUpViewState(screenState = LoginSignUpScreenState.SignUp)
             ),
             navigator = EmptyDestinationsNavigator
         )
