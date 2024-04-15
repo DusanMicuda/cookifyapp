@@ -23,7 +23,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -48,6 +47,7 @@ import com.micudasoftware.presentation.common.PreviewViewModel
 import com.micudasoftware.presentation.common.padding
 import com.micudasoftware.presentation.common.theme.PreviewTheme
 import com.micudasoftware.presentation.common.utils.rememberBitmapFromUri
+import com.micudasoftware.presentation.onboarding.common.component.SetupProfileTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
@@ -88,30 +88,7 @@ fun UploadProfileImagesScreen(
     )
 
     Scaffold(
-        topBar = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(id = R.string.title_setup_profile),
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                LinearProgressIndicator(
-                    modifier = Modifier.padding(top = 10.dp),
-                    progress = { 0.5f }
-                )
-                Text(
-                    modifier = Modifier.padding(top = 10.dp),
-                    text = stringResource(id = R.string.label_setup_profile_1),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.surfaceDim
-                )
-            }
-        }
+        topBar = { SetupProfileTopBar(progress = 1, maxProgress = 2) }
     ) {
         Column(
             modifier = Modifier

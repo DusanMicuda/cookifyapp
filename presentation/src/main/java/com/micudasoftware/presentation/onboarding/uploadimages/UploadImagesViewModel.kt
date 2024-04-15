@@ -6,6 +6,8 @@ import com.micudasoftware.domain.image.repository.ImageRepository
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
 import com.micudasoftware.presentation.common.ComposeViewModel
+import com.micudasoftware.presentation.common.model.NavEvent
+import com.micudasoftware.presentation.navigation.destinations.UpdateAboutMeScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -139,7 +141,7 @@ class UploadImagesViewModel @Inject constructor(
                         )
                     )
                 }.onSuccess {
-                    // Todo navigate to next
+                    navigate(NavEvent.To(UpdateAboutMeScreenDestination))
                 }.onError {
                     Timber.e(it.throwable, "Failed to save images: ${it.code} - ${it.message}")
                     // Todo show error dialog
