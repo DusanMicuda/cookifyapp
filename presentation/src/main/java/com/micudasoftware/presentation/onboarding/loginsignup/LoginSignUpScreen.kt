@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -124,6 +125,7 @@ fun LoginSignUpScreen(
                 error = viewState.password.error?.let { stringResource(it) },
                 singleLine = true,
                 onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangePassword(it)) },
+                visualTransformation = PasswordVisualTransformation(),
                 keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
