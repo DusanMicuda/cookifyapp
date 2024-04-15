@@ -200,8 +200,6 @@ private fun ImageUploadBox(
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
 ) {
-    val bitmap = rememberBitmapFromUri(uri = uri)?.asImageBitmap()
-
     Box(
         modifier = modifier
             .background(
@@ -210,16 +208,6 @@ private fun ImageUploadBox(
             ),
         contentAlignment = Alignment.Center
     ) {
-        bitmap?.let {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape),
-                bitmap = it,
-                contentScale = ContentScale.FillBounds,
-                contentDescription = null
-            )
-        }
         when (pictureState) {
             UploadPictureState.Idle -> {
                 Box(
@@ -244,6 +232,16 @@ private fun ImageUploadBox(
             }
 
             UploadPictureState.Done -> {
+                rememberBitmapFromUri(uri = uri)?.asImageBitmap()?.let {
+                    Image(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(CircleShape),
+                        bitmap = it,
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = null
+                    )
+                }
                 IconButton(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
