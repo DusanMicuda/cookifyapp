@@ -1,5 +1,6 @@
 package com.micudasoftware.presentation.onboarding.uploadimages
 
+import android.net.Uri
 import com.micudasoftware.presentation.common.UIState
 
 /**
@@ -15,10 +16,23 @@ data class SetupProfileViewState(
 ) : UIState()
 
 /**
- * Enum representing the different states of an image upload.
+ * Sealed representing the different states of an image upload.
  */
-enum class UploadPictureState {
-    Idle,
-    Loading,
-    Done,
+sealed class UploadPictureState {
+    /**
+     * The initial state when no upload is in progress.
+     */
+    data object Idle: UploadPictureState()
+
+    /**
+     * The state when an image is being uploaded.
+     */
+    data object Loading: UploadPictureState()
+
+    /**
+     * The state when an image has been successfully uploaded.
+     *
+     * @param uri The Uri of the uploaded image.
+     */
+    data class Done(val uri: Uri): UploadPictureState()
 }

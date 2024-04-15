@@ -24,6 +24,16 @@ sealed class UploadImagesEvent: UIEvent() {
     data class UploadTitleImage(val imageUri: Uri): UploadImagesEvent()
 
     /**
+     * Event to remove the profile image.
+     */
+    data object RemoveProfileImage: UploadImagesEvent()
+
+    /**
+     * Event to remove the title image.
+     */
+    data object RemoveTitleImage: UploadImagesEvent()
+
+    /**
      * Event to save the uploaded images.
      */
     data object SaveUploadedImages: UploadImagesEvent()

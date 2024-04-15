@@ -31,9 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,22 +68,18 @@ fun UploadProfileImagesScreen(
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
-    var profileUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
     val profileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             it?.let {
-                profileUri = it
                 viewModel.onEvent(UploadImagesEvent.UploadProfileImage(it))
             }
         }
     )
-    var titleUri by rememberSaveable { mutableStateOf(Uri.EMPTY) }
     val titleLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {
             it?.let {
-                titleUri = it
                 viewModel.onEvent(UploadImagesEvent.UploadTitleImage(it))
             }
         }
@@ -133,9 +126,8 @@ fun UploadProfileImagesScreen(
                     .padding(top = 20.dp, horizontal = 20.dp)
                     .size(200.dp)
                     .align(Alignment.CenterHorizontally),
-                uri = profileUri,
                 onClick = { profileLauncher.launch("image/*") },
-                onDelete = {},
+                onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveProfileImage) },
                 pictureState = viewState.profilePictureState
             )
             Text(
@@ -148,9 +140,8 @@ fun UploadProfileImagesScreen(
                     .padding(top = 20.dp, horizontal = 10.dp)
                     .fillMaxWidth()
                     .height(150.dp),
-                uri = titleUri,
                 onClick = { titleLauncher.launch("image/*") },
-                onDelete = {},
+                onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveTitleImage) },
                 pictureState = viewState.titlePictureState,
                 shape = RoundedCornerShape(10.dp)
             )
@@ -184,7 +175,6 @@ fun UploadProfileImagesScreen(
  * Composable function representing an image upload box.
  * It displays the image and the upload state, and allows the user to upload a new image or delete the current one.
  *
- * @param uri The Uri of the image to display.
  * @param pictureState The state of the image upload.
  * @param onClick The function to call when the box is clicked.
  * @param onDelete The function to call when the delete button is clicked.
@@ -193,7 +183,6 @@ fun UploadProfileImagesScreen(
  */
 @Composable
 private fun ImageUploadBox(
-    uri: Uri,
     pictureState: UploadPictureState,
     onClick: () -> Unit,
     onDelete: () -> Unit,
@@ -231,8 +220,8 @@ private fun ImageUploadBox(
                 CircularProgressIndicator()
             }
 
-            UploadPictureState.Done -> {
-                rememberBitmapFromUri(uri = uri)?.asImageBitmap()?.let {
+            is UploadPictureState.Done -> {
+                rememberBitmapFromUri(uri = pictureState.uri)?.asImageBitmap()?.let {
                     Image(
                         modifier = Modifier
                             .fillMaxSize()
@@ -276,7 +265,7 @@ private fun UploadProfileImagesScreenPreview() {
             viewModel = PreviewViewModel(
                 SetupProfileViewState(
                     UploadPictureState.Loading,
-                    UploadPictureState.Done
+                    UploadPictureState.Done(Uri.EMPTY)
                 )
             ),
             navigator = EmptyDestinationsNavigator
