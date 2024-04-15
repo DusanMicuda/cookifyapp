@@ -18,12 +18,9 @@ class AuthInterceptor(
         val requestBuilder = chain.request().newBuilder()
         val token = userLocalDataSource.getAuthorizationToken()
 
-        return token?.let {
+        token?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")
-            chain.proceed(requestBuilder.build())
-        } ?: Response.Builder()
-            .code(401)
-            .message("Authorization token not found!")
-            .build()
+        }
+        return chain.proceed(requestBuilder.build())
     }
 }
