@@ -3,6 +3,8 @@ package com.micudasoftware.presentation.onboarding.uploadimages
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.image.repository.ImageRepository
+import com.micudasoftware.domain.user.repository.UserRepository
+import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
 import com.micudasoftware.presentation.common.ComposeViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +20,14 @@ import javax.inject.Inject
  * It uses the ImageRepository to upload images.
  *
  * @property imageRepository The repository used to upload images.
+ * @property userRepository The repository for user data and operations.
+ * @property userProfileRepository The repository for user profile data and operations.
  */
 @HiltViewModel
 class UploadImagesViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
+    private val userRepository: UserRepository,
+    private val userProfileRepository: UserProfileRepository,
 ): ComposeViewModel<SetupProfileViewState, UploadImagesEvent>() {
 
     // The current view state, represented as a MutableStateFlow. This allows the UI to observe changes to the state.
@@ -108,7 +114,38 @@ class UploadImagesViewModel @Inject constructor(
         _viewState.update { it.copy(titlePictureState = UploadPictureState.Idle) }
     }
 
+    /**
+     * Saves the uploaded images.
+     * It updates the user profile with the uploaded image URLs.
+     * If the operation is successful, it navigates to the next screen.
+     * If the operation fails, it logs the error.
+     */
     private fun saveUploadedImages() {
-        // Todo implement
+        //Todo show loading
+        viewModelScope.launch {
+            val userId = userRepository.getUserId()
+            if (userId == null) {
+                Timber.e("User id is null")
+                // Todo show error dialog
+                return@launch
+            }
+
+            userProfileRepository.getUserProfile(userId)
+                .chain { userProfile ->
+                    userProfileRepository.updateUserProfile(
+                        userProfile.copy(
+                            profilePhotoUrl = profileImageUrl ?: userProfile.profilePhotoUrl,
+                            titlePhotoUrl = titleImageUrl ?: userProfile.titlePhotoUrl
+                        )
+                    )
+                }.onSuccess {
+                    // Todo navigate to next
+                }.onError {
+                    Timber.e(it.throwable, "Failed to save images: ${it.code} - ${it.message}")
+                    // Todo show error dialog
+                }.onFinished {
+                    // Todo hide loading
+                }
+        }
     }
 }
