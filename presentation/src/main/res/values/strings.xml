@@ -14,4 +14,11 @@
     <string name="text_field_required">Field is required !</string>
     <string name="text_wrong_email">Wrong email !</string>
     <string name="text_weak_password">Weak password !</string>
+    <string name="title_setup_profile">Set up your profile</string>
+    <string name="label_setup_profile_1">1/2</string>
+    <string name="label_setup_profile_2">2/2</string>
+    <string name="title_add_profile_image">Add your profile picture.</string>
+    <string name="title_add_background_image">Add your background picture.</string>
+    <string name="button_next">Next</string>
+    <string name="button_skip">I\'ll do it later.</string>
 </resources>
