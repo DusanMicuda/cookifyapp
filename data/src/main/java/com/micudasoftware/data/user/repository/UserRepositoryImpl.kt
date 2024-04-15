@@ -24,10 +24,13 @@ class UserRepositoryImpl @Inject constructor(
     override fun getAuthorizationToken(): String? =
         userLocalDataSource.getAuthorizationToken()
 
+    override fun getUserId(): String? = userLocalDataSource.getUserId()
+
     override suspend fun login(email: String, password: String): Result<Unit> =
         userRemoteDataSource.login(LoginRequestDto(email, password))
             .onSuccess {
                 userLocalDataSource.saveAuthorizationToken(it.token)
+                userLocalDataSource.saveUserId(it.userId)
                 userLocalDataSource.saveCredentials(UserCredentials(email, password))
             }.map {}
 

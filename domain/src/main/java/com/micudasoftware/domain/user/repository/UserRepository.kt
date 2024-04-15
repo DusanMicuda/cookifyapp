@@ -15,6 +15,13 @@ interface UserRepository {
     fun getAuthorizationToken(): String?
 
     /**
+     * Function to get User Id.
+     *
+     * @return The user id if exists.
+     */
+    fun getUserId(): String?
+
+    /**
      * Function to login user.
      *
      * @param email The user's email.
