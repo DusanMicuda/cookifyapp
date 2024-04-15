@@ -57,6 +57,8 @@ fun LoginSignUpScreen(
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    viewModel.registerNavObserver(navigator)
+
     Column(
         modifier = Modifier
             .fillMaxSize()

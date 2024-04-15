@@ -1,7 +1,6 @@
 package com.micudasoftware.presentation.onboarding.uploadimages
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.image.repository.ImageRepository
 import com.micudasoftware.presentation.common.ComposeViewModel
@@ -23,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UploadImagesViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
-): ViewModel(), ComposeViewModel<SetupProfileViewState, UploadImagesEvent> {
+): ComposeViewModel<SetupProfileViewState, UploadImagesEvent>() {
 
     // The current view state, represented as a MutableStateFlow. This allows the UI to observe changes to the state.
     private val _viewState = MutableStateFlow(SetupProfileViewState())

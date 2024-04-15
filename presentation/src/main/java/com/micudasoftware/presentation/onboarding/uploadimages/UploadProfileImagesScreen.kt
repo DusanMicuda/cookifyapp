@@ -68,6 +68,8 @@ fun UploadProfileImagesScreen(
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
+    viewModel.registerNavObserver(navigator)
+
     val profileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = {

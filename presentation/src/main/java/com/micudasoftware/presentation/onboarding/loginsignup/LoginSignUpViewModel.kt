@@ -1,10 +1,10 @@
 package com.micudasoftware.presentation.onboarding.loginsignup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
+import com.micudasoftware.presentation.common.model.NavEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginSignUpViewModel @Inject constructor(
     private val userRepository: UserRepository,
-) : ViewModel(), ComposeViewModel<LoginSignUpViewState, LoginSignUpEvent> {
+) : ComposeViewModel<LoginSignUpViewState, LoginSignUpEvent>() {
 
     private val _viewState = MutableStateFlow(LoginSignUpViewState())
     override val viewState = _viewState.asStateFlow()
