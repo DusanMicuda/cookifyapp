@@ -1,6 +1,5 @@
 package com.micudasoftware.data.userprofile.repository
 
-import com.micudasoftware.data.userprofile.api.dto.GetUserProfileRequestDto
 import com.micudasoftware.data.userprofile.datasource.UserProfileDataSource
 import com.micudasoftware.domain.common.Result
 import com.micudasoftware.domain.userprofile.model.UserProfile
@@ -17,7 +16,7 @@ class UserProfileRepositoryImpl @Inject constructor(
 ): UserProfileRepository {
 
     override suspend fun getUserProfile(userId: String): Result<UserProfile> =
-        dataSource.getUserProfile(GetUserProfileRequestDto(userId))
+        dataSource.getUserProfile(userId)
             .map { it.toUserProfile() }
 
     override suspend fun updateUserProfile(userProfile: UserProfile): Result<Unit> =
