@@ -3,10 +3,15 @@ package com.micudasoftware.presentation.onboarding.updateaboutme
 import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
+import com.micudasoftware.presentation.common.model.ButtonModel
+import com.micudasoftware.presentation.common.model.DialogModel
+import com.micudasoftware.presentation.common.model.StringModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -36,7 +41,6 @@ class UpdateAboutMeViewModel @Inject constructor(
     override fun onEvent(event: UpdateAboutMeEvent) {
         when (event) {
             is UpdateAboutMeEvent.UpdateAboutMe -> updateAboutMe(event.aboutMe)
-            UpdateAboutMeEvent.Skip -> TODO("Not yet implemented")
         }
     }
 
@@ -45,11 +49,12 @@ class UpdateAboutMeViewModel @Inject constructor(
      * @param aboutMe The new about me text.
      */
     private fun updateAboutMe(aboutMe: String) {
-        _viewState.value = UpdateAboutMeViewState(isLoading = true)
+        _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             val userId = userRepository.getUserId()
             if(userId == null) {
-                _viewState.value = UpdateAboutMeViewState(isLoading = false)
+                _viewState.update { it.copy(isLoading = false) }
+                showErrorDialog()
                 return@launch
             }
 
@@ -59,13 +64,32 @@ class UpdateAboutMeViewModel @Inject constructor(
                         it.copy(aboutMeText = aboutMe)
                     )
                 }.onSuccess {
-                    // Todo navigate to next screen
+                    // Todo navigate to feed
                 }.onError {
                     Timber.e(it.throwable, "Failed to update about me: ${it.code} - ${it.message}")
-                    // Todo show error dialog
+                    showErrorDialog()
                 }.onFinished {
-                    _viewState.value = UpdateAboutMeViewState(isLoading = false)
+                    _viewState.update { it.copy(isLoading = false) }
                 }
+        }
+    }
+
+    /**
+     * Function to show generic error dialog.
+     */
+    private fun showErrorDialog() {
+        _viewState.update { state ->
+            state.copy(
+                dialog = DialogModel(
+                    title = StringModel.Resource(R.string.title_something_went_wrong),
+                    message = StringModel.Resource(R.string.text_error_occurred),
+                    positiveButton = ButtonModel(
+                        text = StringModel.Resource(R.string.button_understand),
+                        onClick = { _viewState.update { it.copy(dialog = null) } }
+                    ),
+                    onDismiss = { _viewState.update { it.copy(dialog = null) } }
+                )
+            )
         }
     }
 }

@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.PreviewViewModel
+import com.micudasoftware.presentation.common.component.ScreenContentWrapper
 import com.micudasoftware.presentation.common.theme.PreviewTheme
 import com.micudasoftware.presentation.onboarding.common.component.SetupProfileTopBar
 import com.ramcosta.composedestinations.annotation.Destination
@@ -52,48 +53,53 @@ fun UpdateAboutMeScreen(
 
     var aboutMe by rememberSaveable { mutableStateOf("") }
 
-    Scaffold(
-        topBar = { SetupProfileTopBar(progress = 2, maxProgress = 2) }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp)
-                .fillMaxSize()
-        ) {
-            Text(
-                text = stringResource(id = R.string.title_about_me),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(top = 10.dp)
-                    .fillMaxWidth(),
-                value = aboutMe,
-                minLines = 5,
-                placeholder = { Text(text = stringResource(id = R.string.placeholder_about_me)) },
-                onValueChange = { aboutMe = it },
-                shape = RoundedCornerShape(10.dp),
-            )
+    ScreenContentWrapper(
+        isLoading = viewState.isLoading,
+        dialog = viewState.dialog
+    ) {
+        Scaffold(
+            topBar = { SetupProfileTopBar(progress = 2, maxProgress = 2) }
+        ) { paddingValues ->
             Column(
                 modifier = Modifier
-                    .padding(vertical = 10.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                    .padding(paddingValues)
+                    .padding(horizontal = 20.dp)
+                    .fillMaxSize()
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onEvent(UpdateAboutMeEvent.UpdateAboutMe(aboutMe)) }
+                Text(
+                    text = stringResource(id = R.string.title_about_me),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxWidth(),
+                    value = aboutMe,
+                    minLines = 5,
+                    placeholder = { Text(text = stringResource(id = R.string.placeholder_about_me)) },
+                    onValueChange = { aboutMe = it },
+                    shape = RoundedCornerShape(10.dp),
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    Text(text = stringResource(id = R.string.button_finish))
-                }
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onEvent(UpdateAboutMeEvent.Skip) }
-                ) {
-                    Text(text = stringResource(id = R.string.button_skip))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { viewModel.onEvent(UpdateAboutMeEvent.UpdateAboutMe(aboutMe)) }
+                    ) {
+                        Text(text = stringResource(id = R.string.button_finish))
+                    }
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { /* Todo navigate to feed */ }
+                    ) {
+                        Text(text = stringResource(id = R.string.button_skip))
+                    }
                 }
             }
         }
