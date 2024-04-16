@@ -5,6 +5,7 @@ import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.model.NavEvent
+import com.micudasoftware.presentation.navigation.destinations.UploadProfileImagesScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -225,7 +226,7 @@ class LoginSignUpViewModel @Inject constructor(
                     password = viewState.value.password.value
                 )
             }.onSuccess {
-                // Todo navigate to setup profile
+                navigate(NavEvent.To(UploadProfileImagesScreenDestination))
             }.onError {
                 Timber.e(it.throwable, "Sign Up failed: ${it.code} - ${it.message}")
                 // Todo show error dialog
