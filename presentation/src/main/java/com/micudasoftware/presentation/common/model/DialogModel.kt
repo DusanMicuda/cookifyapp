@@ -10,8 +10,8 @@ package com.micudasoftware.presentation.common.model
  * @property onDismiss The action to be executed when the dialog is dismissed.
  */
 data class DialogModel(
-    val title: String,
-    val message: String,
+    val title: StringModel,
+    val message: StringModel,
     val positiveButton: ButtonModel,
     val negativeButton: ButtonModel? = null,
     val onDismiss: () -> Unit,

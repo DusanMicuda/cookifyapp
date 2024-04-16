@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.micudasoftware.presentation.common.model.ButtonModel
 import com.micudasoftware.presentation.common.model.DialogModel
+import com.micudasoftware.presentation.common.model.StringModel
 import com.micudasoftware.presentation.common.padding
 import com.micudasoftware.presentation.common.theme.PreviewTheme
 
@@ -80,13 +81,13 @@ private fun Dialog(dialog: DialogModel) {
             horizontalAlignment = Alignment.Start,
         ) {
             Text(
-                text = dialog.title,
+                text = dialog.title.getString(),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 modifier = Modifier.padding(top = 8.dp),
-                text = dialog.message,
+                text = dialog.message.getString(),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Row(
@@ -95,11 +96,11 @@ private fun Dialog(dialog: DialogModel) {
             ) {
                 dialog.negativeButton?.let {
                     TextButton(onClick = it.onClick) {
-                        Text(text = it.text)
+                        Text(text = it.text.getString())
                     }
                 }
                 TextButton(onClick = dialog.positiveButton.onClick) {
-                    Text(text = dialog.positiveButton.text)
+                    Text(text = dialog.positiveButton.text.getString())
                 }
             }
         }
@@ -146,10 +147,10 @@ private fun ScreenContentWrapperDialogPreview() {
     PreviewTheme {
         ScreenContentWrapper(
             dialog = DialogModel(
-                title = "Title",
-                message = "Message",
-                positiveButton = ButtonModel("Positive") {},
-                negativeButton = ButtonModel("Negative") {},
+                title = StringModel.String("Title"),
+                message = StringModel.String("Message"),
+                positiveButton = ButtonModel(StringModel.String("Positive")) {},
+                negativeButton = ButtonModel(StringModel.String("Negative")) {},
                 onDismiss = {},
             ),
         ) {}

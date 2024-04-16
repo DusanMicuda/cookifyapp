@@ -7,6 +7,6 @@ package com.micudasoftware.presentation.common.model
  * @property onClick The action to be executed when the button is clicked.
  */
 data class ButtonModel(
-    val text: String,
+    val text: StringModel,
     val onClick: () -> Unit,
 )
