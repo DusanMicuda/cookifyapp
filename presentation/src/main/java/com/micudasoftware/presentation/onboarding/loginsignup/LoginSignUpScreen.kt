@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.PreviewViewModel
+import com.micudasoftware.presentation.common.component.ScreenContentWrapper
 import com.micudasoftware.presentation.common.component.ValidatedTextField
 import com.micudasoftware.presentation.common.padding
 import com.micudasoftware.presentation.common.theme.PreviewTheme
@@ -60,127 +61,132 @@ fun LoginSignUpScreen(
 
     viewModel.registerNavObserver(navigator)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.primaryContainer),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ScreenContentWrapper(
+        isLoading = viewState.isLoading,
+        dialog = viewState.dialog
     ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 20.dp, top = 46.dp),
-            text = stringResource(id = R.string.app_name),
-            style = MaterialTheme.typography.displaySmall
-        )
-        Text(
-            modifier = Modifier.padding(horizontal = 16.dp, top = 16.dp),
-            text = stringResource(id = R.string.app_description),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
-        Image(
-            modifier = Modifier
-                .padding(horizontal = 56.dp, top = 42.dp)
-                .weight(1f),
-            painter = painterResource(id = R.drawable.login_image),
-            contentDescription = null,
-        )
         Column(
-            modifier = Modifier.padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.primaryContainer),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedVisibility(
-                visible = viewState.screenState == LoginSignUpScreenState.SignUp,
-                enter = slideInVertically(),
-                exit = slideOutVertically(),
+            Text(
+                modifier = Modifier.padding(horizontal = 20.dp, top = 46.dp),
+                text = stringResource(id = R.string.app_name),
+                style = MaterialTheme.typography.displaySmall
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 16.dp, top = 16.dp),
+                text = stringResource(id = R.string.app_description),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center
+            )
+            Image(
+                modifier = Modifier
+                    .padding(horizontal = 56.dp, top = 42.dp)
+                    .weight(1f),
+                painter = painterResource(id = R.drawable.login_image),
+                contentDescription = null,
+            )
+            Column(
+                modifier = Modifier.padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                ValidatedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.label_full_name),
-                    value = viewState.name.value,
-                    error = viewState.name.error?.let { stringResource(it) },
-                    singleLine = true,
-                    onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeName(it)) },
-                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                )
-            }
-            ValidatedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                label = stringResource(id = R.string.label_email),
-                value = viewState.email.value,
-                error = viewState.email.error?.let { stringResource(it) },
-                singleLine = true,
-                onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeEmail(it)) },
-                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            )
-            ValidatedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                label = stringResource(id = R.string.label_password),
-                value = viewState.password.value,
-                error = viewState.password.error?.let { stringResource(it) },
-                singleLine = true,
-                onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangePassword(it)) },
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            )
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                onClick = {
-                    viewModel.onEvent(
-                        when(viewState.screenState) {
-                            LoginSignUpScreenState.Login -> LoginSignUpEvent.Login
-                            LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SignUp
-                        }
+                AnimatedVisibility(
+                    visible = viewState.screenState == LoginSignUpScreenState.SignUp,
+                    enter = slideInVertically(),
+                    exit = slideOutVertically(),
+                ) {
+                    ValidatedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = stringResource(id = R.string.label_full_name),
+                        value = viewState.name.value,
+                        error = viewState.name.error?.let { stringResource(it) },
+                        singleLine = true,
+                        onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeName(it)) },
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                     )
                 }
-            ) {
-                Text(
-                    text = stringResource(
-                        when(viewState.screenState) {
-                            LoginSignUpScreenState.Login -> R.string.button_login
-                            LoginSignUpScreenState.SignUp -> R.string.button_signup
-                        }
-                    )
-                )
-            }
-            Row(modifier = Modifier.padding(horizontal = 24.dp)) {
-                Text(
-                    text = stringResource(
-                        when (viewState.screenState) {
-                            LoginSignUpScreenState.Login -> R.string.text_dont_have_account
-                            LoginSignUpScreenState.SignUp -> R.string.text_already_have_account
-                        }
-                    ),
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
+                ValidatedTextField(
                     modifier = Modifier
-                        .padding(start = 2.dp)
-                        .clickable {
-                            viewModel.onEvent(
-                                when (viewState.screenState) {
-                                    LoginSignUpScreenState.Login -> LoginSignUpEvent.SwitchToSignUp
-                                    LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SwitchToLogin
-                                }
-                            )
-                        },
-                    text = stringResource(
-                        when (viewState.screenState) {
-                            LoginSignUpScreenState.Login -> R.string.text_create_account
-                            LoginSignUpScreenState.SignUp -> R.string.text_login
-                        }
-                    ),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.tertiary
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    label = stringResource(id = R.string.label_email),
+                    value = viewState.email.value,
+                    error = viewState.email.error?.let { stringResource(it) },
+                    singleLine = true,
+                    onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangeEmail(it)) },
+                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
+                ValidatedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    label = stringResource(id = R.string.label_password),
+                    value = viewState.password.value,
+                    error = viewState.password.error?.let { stringResource(it) },
+                    singleLine = true,
+                    onValueChange = { viewModel.onEvent(LoginSignUpEvent.ChangePassword(it)) },
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                )
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                    onClick = {
+                        viewModel.onEvent(
+                            when (viewState.screenState) {
+                                LoginSignUpScreenState.Login -> LoginSignUpEvent.Login
+                                LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SignUp
+                            }
+                        )
+                    }
+                ) {
+                    Text(
+                        text = stringResource(
+                            when (viewState.screenState) {
+                                LoginSignUpScreenState.Login -> R.string.button_login
+                                LoginSignUpScreenState.SignUp -> R.string.button_signup
+                            }
+                        )
+                    )
+                }
+                Row(modifier = Modifier.padding(horizontal = 24.dp)) {
+                    Text(
+                        text = stringResource(
+                            when (viewState.screenState) {
+                                LoginSignUpScreenState.Login -> R.string.text_dont_have_account
+                                LoginSignUpScreenState.SignUp -> R.string.text_already_have_account
+                            }
+                        ),
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .clickable {
+                                viewModel.onEvent(
+                                    when (viewState.screenState) {
+                                        LoginSignUpScreenState.Login -> LoginSignUpEvent.SwitchToSignUp
+                                        LoginSignUpScreenState.SignUp -> LoginSignUpEvent.SwitchToLogin
+                                    }
+                                )
+                            },
+                        text = stringResource(
+                            when (viewState.screenState) {
+                                LoginSignUpScreenState.Login -> R.string.text_create_account
+                                LoginSignUpScreenState.SignUp -> R.string.text_login
+                            }
+                        ),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
             }
         }
     }

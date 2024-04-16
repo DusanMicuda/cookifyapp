@@ -22,4 +22,7 @@
     <string name="title_about_me">"Tell others something about you."</string>
     <string name="placeholder_about_me">"I am a passionate cook who loves to share my recipes with the world."</string>
     <string name="button_finish">Finish</string>
+    <string name="title_something_went_wrong">Something went wrong !</string>
+    <string name="text_error_occurred">An error occurred while processing your request. Please try again later.</string>
+    <string name="button_understand">Understand</string>
 </resources>

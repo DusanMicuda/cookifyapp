@@ -4,7 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
+import com.micudasoftware.presentation.common.model.ButtonModel
+import com.micudasoftware.presentation.common.model.DialogModel
 import com.micudasoftware.presentation.common.model.NavEvent
+import com.micudasoftware.presentation.common.model.StringModel
 import com.micudasoftware.presentation.navigation.destinations.UploadProfileImagesScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -195,9 +198,9 @@ class LoginSignUpViewModel @Inject constructor(
                 password = viewState.value.password.value
             ).onSuccess {
                 // Todo navigate to feed
-            }.onError {
-                Timber.e(it.throwable, "Login Failed: ${it.code} - ${it.message}")
-                // Todo show error dialog
+            }.onError { error ->
+                Timber.e(error.throwable, "Login Failed: ${error.code} - ${error.message}")
+                showErrorDialog()
             }.onFinished {
                 _viewState.update { it.copy(isLoading = false) }
             }
@@ -229,10 +232,29 @@ class LoginSignUpViewModel @Inject constructor(
                 navigate(NavEvent.To(UploadProfileImagesScreenDestination))
             }.onError {
                 Timber.e(it.throwable, "Sign Up failed: ${it.code} - ${it.message}")
-                // Todo show error dialog
+                showErrorDialog()
             }.onFinished {
                 _viewState.update { it.copy(isLoading = false) }
             }
+        }
+    }
+
+    /**
+     * Function to show generic error dialog.
+     */
+    private fun showErrorDialog() {
+        _viewState.update { state ->
+            state.copy(
+                dialog = DialogModel(
+                    title = StringModel.Resource(R.string.title_something_went_wrong),
+                    message = StringModel.Resource(R.string.text_error_occurred),
+                    positiveButton = ButtonModel(
+                        text = StringModel.Resource(R.string.button_understand),
+                        onClick = { _viewState.update { it.copy(dialog = null) } }
+                    ),
+                    onDismiss = { _viewState.update { it.copy(dialog = null) } }
+                )
+            )
         }
     }
 

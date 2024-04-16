@@ -1,6 +1,7 @@
 package com.micudasoftware.presentation.onboarding.loginsignup
 
 import com.micudasoftware.presentation.common.UIState
+import com.micudasoftware.presentation.common.model.DialogModel
 import com.micudasoftware.presentation.common.model.ValidatedFieldModel
 
 /**
@@ -11,6 +12,7 @@ import com.micudasoftware.presentation.common.model.ValidatedFieldModel
  * @property password The user's password.
  * @property isLoading The flag that indicates if loading animation should be shown.
  * @property screenState The state of screen.
+ * @property dialog The dialog to be shown.
  */
 data class LoginSignUpViewState(
     val name: ValidatedFieldModel = ValidatedFieldModel(),
@@ -18,4 +20,5 @@ data class LoginSignUpViewState(
     val password: ValidatedFieldModel = ValidatedFieldModel(),
     val isLoading: Boolean = false,
     val screenState: LoginSignUpScreenState = LoginSignUpScreenState.Login,
+    val dialog: DialogModel? = null,
 ) : UIState()
