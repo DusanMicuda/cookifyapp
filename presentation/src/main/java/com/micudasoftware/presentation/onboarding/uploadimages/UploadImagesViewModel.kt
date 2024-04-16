@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.image.repository.ImageRepository
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
+import com.micudasoftware.presentation.common.model.ButtonModel
+import com.micudasoftware.presentation.common.model.DialogModel
 import com.micudasoftware.presentation.common.model.NavEvent
+import com.micudasoftware.presentation.common.model.StringModel
 import com.micudasoftware.presentation.navigation.destinations.UpdateAboutMeScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -123,12 +127,13 @@ class UploadImagesViewModel @Inject constructor(
      * If the operation fails, it logs the error.
      */
     private fun saveUploadedImages() {
-        //Todo show loading
+        _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             val userId = userRepository.getUserId()
             if (userId == null) {
                 Timber.e("User id is null")
-                // Todo show error dialog
+                _viewState.update { it.copy(isLoading = false) }
+                showErrorDialog()
                 return@launch
             }
 
@@ -144,10 +149,29 @@ class UploadImagesViewModel @Inject constructor(
                     navigate(NavEvent.To(UpdateAboutMeScreenDestination))
                 }.onError {
                     Timber.e(it.throwable, "Failed to save images: ${it.code} - ${it.message}")
-                    // Todo show error dialog
+                    showErrorDialog()
                 }.onFinished {
-                    // Todo hide loading
+                    _viewState.update { it.copy(isLoading = false) }
                 }
+        }
+    }
+
+    /**
+     * Function to show generic error dialog.
+     */
+    private fun showErrorDialog() {
+        _viewState.update { state ->
+            state.copy(
+                dialog = DialogModel(
+                    title = StringModel.Resource(R.string.title_something_went_wrong),
+                    message = StringModel.Resource(R.string.text_error_occurred),
+                    positiveButton = ButtonModel(
+                        text = StringModel.Resource(R.string.button_understand),
+                        onClick = { _viewState.update { it.copy(dialog = null) } }
+                    ),
+                    onDismiss = { _viewState.update { it.copy(dialog = null) } }
+                )
+            )
         }
     }
 }

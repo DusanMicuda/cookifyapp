@@ -2,6 +2,7 @@ package com.micudasoftware.presentation.onboarding.uploadimages
 
 import android.net.Uri
 import com.micudasoftware.presentation.common.UIState
+import com.micudasoftware.presentation.common.model.DialogModel
 
 /**
  * Data class representing the view state of the SetupProfile screen.
@@ -9,10 +10,14 @@ import com.micudasoftware.presentation.common.UIState
  *
  * @property profilePictureState The state of the profile picture upload.
  * @property titlePictureState The state of the title picture upload.
+ * @property isLoading The flag that indicates if loading animation should be shown.
+ * @property dialog The dialog to be shown.
  */
 data class SetupProfileViewState(
     val profilePictureState: UploadPictureState = UploadPictureState.Idle,
     val titlePictureState: UploadPictureState = UploadPictureState.Idle,
+    val isLoading: Boolean = false,
+    val dialog: DialogModel? = null,
 ) : UIState()
 
 /**

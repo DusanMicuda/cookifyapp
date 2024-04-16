@@ -44,9 +44,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.PreviewViewModel
+import com.micudasoftware.presentation.common.component.ScreenContentWrapper
 import com.micudasoftware.presentation.common.padding
 import com.micudasoftware.presentation.common.theme.PreviewTheme
 import com.micudasoftware.presentation.common.utils.rememberBitmapFromUri
+import com.micudasoftware.presentation.navigation.destinations.UpdateAboutMeScreenDestination
 import com.micudasoftware.presentation.onboarding.common.component.SetupProfileTopBar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -87,65 +89,70 @@ fun UploadProfileImagesScreen(
         }
     )
 
-    Scaffold(
-        topBar = { SetupProfileTopBar(progress = 1, maxProgress = 2) }
+    ScreenContentWrapper(
+        isLoading = viewState.isLoading,
+        dialog = viewState.dialog
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .padding(horizontal = 20.dp)
-                .fillMaxSize()
+        Scaffold(
+            topBar = { SetupProfileTopBar(progress = 1, maxProgress = 2) }
         ) {
-            Text(
-                text = stringResource(id = R.string.title_add_profile_image),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            ImageUploadBox(
-                modifier = Modifier
-                    .padding(top = 20.dp, horizontal = 20.dp)
-                    .size(200.dp)
-                    .align(Alignment.CenterHorizontally),
-                onClick = { profileLauncher.launch("image/*") },
-                onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveProfileImage) },
-                pictureState = viewState.profilePictureState
-            )
-            Text(
-                modifier = Modifier.padding(top = 20.dp),
-                text = stringResource(id = R.string.title_add_background_image),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            ImageUploadBox(
-                modifier = Modifier
-                    .padding(top = 20.dp, horizontal = 10.dp)
-                    .fillMaxWidth()
-                    .height(150.dp),
-                onClick = { titleLauncher.launch("image/*") },
-                onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveTitleImage) },
-                pictureState = viewState.titlePictureState,
-                shape = RoundedCornerShape(10.dp)
-            )
             Column(
                 modifier = Modifier
-                    .padding(vertical = 10.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Bottom
+                    .padding(it)
+                    .padding(horizontal = 20.dp)
+                    .fillMaxSize()
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { viewModel.onEvent(UploadImagesEvent.SaveUploadedImages) }
+                Text(
+                    text = stringResource(id = R.string.title_add_profile_image),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                ImageUploadBox(
+                    modifier = Modifier
+                        .padding(top = 20.dp, horizontal = 20.dp)
+                        .size(200.dp)
+                        .align(Alignment.CenterHorizontally),
+                    onClick = { profileLauncher.launch("image/*") },
+                    onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveProfileImage) },
+                    pictureState = viewState.profilePictureState
+                )
+                Text(
+                    modifier = Modifier.padding(top = 20.dp),
+                    text = stringResource(id = R.string.title_add_background_image),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                ImageUploadBox(
+                    modifier = Modifier
+                        .padding(top = 20.dp, horizontal = 10.dp)
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    onClick = { titleLauncher.launch("image/*") },
+                    onDelete = { viewModel.onEvent(UploadImagesEvent.RemoveTitleImage) },
+                    pictureState = viewState.titlePictureState,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-                    Text(text = stringResource(id = R.string.button_next))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { viewModel.onEvent(UploadImagesEvent.SaveUploadedImages) }
+                    ) {
+                        Text(text = stringResource(id = R.string.button_next))
+                    }
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { navigator.navigate(UpdateAboutMeScreenDestination) }
+                    ) {
+                        Text(text = stringResource(id = R.string.button_skip))
+                    }
                 }
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { /*TODO*/ }
-                ) {
-                    Text(text = stringResource(id = R.string.button_skip))
-                }
-            }
 
+            }
         }
     }
 }
