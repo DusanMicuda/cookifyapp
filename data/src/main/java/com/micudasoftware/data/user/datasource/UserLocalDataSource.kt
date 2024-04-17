@@ -1,15 +1,14 @@
 package com.micudasoftware.data.user.datasource
 
 import android.content.SharedPreferences
-import com.micudasoftware.data.user.datasource.model.UserCredentials
-import javax.inject.Inject
+import com.micudasoftware.domain.user.model.UserCredentials
 
 /**
  * Local data source for user data.
  *
  * @property sharedPreferences The [SharedPreferences] to store auth token.
  */
-class UserLocalDataSource @Inject constructor(
+class UserLocalDataSource(
     private val sharedPreferences: SharedPreferences,
 ) {
 

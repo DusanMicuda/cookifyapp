@@ -6,14 +6,13 @@ import com.micudasoftware.data.user.api.dto.LoginRequestDto
 import com.micudasoftware.data.user.api.dto.LoginResponseDto
 import com.micudasoftware.data.user.api.dto.SignUpRequestDto
 import com.micudasoftware.domain.common.Result
-import javax.inject.Inject
 
 /**
  * Remote data source for user operations.
  *
  * @property userApi The API for user operations.
  */
-class UserRemoteDataSource @Inject constructor(
+class UserRemoteDataSource(
     private val userApi: UserApi
 ) {
 

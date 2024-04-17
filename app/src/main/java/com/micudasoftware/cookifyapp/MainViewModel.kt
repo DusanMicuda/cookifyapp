@@ -2,7 +2,7 @@ package com.micudasoftware.cookifyapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.micudasoftware.domain.user.repository.UserRepository
+import com.micudasoftware.domain.user.usecase.AutoLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,11 +14,11 @@ import javax.inject.Inject
 /**
  * The Main ViewModel.
  *
- * @property userRepository repository for user operations.
+ * @property autoLogin The use case to auto login the user.
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val autoLogin: AutoLoginUseCase,
 ): ViewModel() {
 
     private val _isLoading = MutableStateFlow(true)
@@ -28,15 +28,15 @@ class MainViewModel @Inject constructor(
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
     init {
-        autoLogin()
+        autoLoginUser()
     }
 
     /**
      * Function to automatic login the user with saved credentials.
      */
-    private fun autoLogin() {
+    private fun autoLoginUser() {
         viewModelScope.launch {
-            userRepository.autoLogin().onSuccess {
+            autoLogin().onSuccess {
                 _isLoggedIn.update { true }
             }.onError {
                 Timber.e(it.throwable, "Auto login failed: ${it.message}")

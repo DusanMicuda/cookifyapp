@@ -1,7 +1,8 @@
 package com.micudasoftware.presentation.onboarding.loginsignup
 
 import androidx.lifecycle.viewModelScope
-import com.micudasoftware.domain.user.repository.UserRepository
+import com.micudasoftware.domain.user.usecase.LoginUserUseCase
+import com.micudasoftware.domain.user.usecase.SignUpAndLoginUseCase
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.model.ButtonModel
@@ -20,11 +21,13 @@ import javax.inject.Inject
 /**
  * ViewModel to login and sign up user.
  *
- * @property userRepository The repository for user data and operations.
+ * @property loginUser The use case to login user.
+ * @property signUpAndLogin The use case to sign up and login user.
  */
 @HiltViewModel
 class LoginSignUpViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val loginUser: LoginUserUseCase,
+    private val signUpAndLogin: SignUpAndLoginUseCase,
 ) : ComposeViewModel<LoginSignUpViewState, LoginSignUpEvent>() {
 
     private val _viewState = MutableStateFlow(LoginSignUpViewState())
@@ -193,7 +196,7 @@ class LoginSignUpViewModel @Inject constructor(
 
         _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            userRepository.login(
+            loginUser(
                 email = viewState.value.email.value,
                 password = viewState.value.password.value
             ).onSuccess {
@@ -219,16 +222,11 @@ class LoginSignUpViewModel @Inject constructor(
 
         _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            userRepository.signup(
+            signUpAndLogin(
                 name = viewState.value.name.value,
                 email = viewState.value.email.value,
                 password = viewState.value.password.value
-            ).chain {
-                userRepository.login(
-                    email = viewState.value.email.value,
-                    password = viewState.value.password.value
-                )
-            }.onSuccess {
+            ).onSuccess {
                 navigate(NavEvent.To(UploadProfileImagesScreenDestination))
             }.onError {
                 Timber.e(it.throwable, "Sign Up failed: ${it.code} - ${it.message}")

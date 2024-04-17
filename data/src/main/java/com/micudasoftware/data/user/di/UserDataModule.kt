@@ -6,6 +6,9 @@ import com.micudasoftware.data.user.datasource.UserLocalDataSource
 import com.micudasoftware.data.user.datasource.UserRemoteDataSource
 import com.micudasoftware.data.user.repository.UserRepositoryImpl
 import com.micudasoftware.domain.user.repository.UserRepository
+import com.micudasoftware.domain.user.usecase.AutoLoginUseCase
+import com.micudasoftware.domain.user.usecase.LoginUserUseCase
+import com.micudasoftware.domain.user.usecase.SignUpAndLoginUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +36,15 @@ object UserDataModule {
         userLocalDataSource: UserLocalDataSource,
         userRemoteDataSource: UserRemoteDataSource
     ): UserRepository = UserRepositoryImpl(userLocalDataSource, userRemoteDataSource)
+
+    @Provides
+    fun provideLoginUserUseCase(userRepository: UserRepository) = LoginUserUseCase(userRepository)
+
+    @Provides
+    fun provideSignUpAndLoginUseCase(userRepository: UserRepository) =
+        SignUpAndLoginUseCase(userRepository)
+
+    @Provides
+    fun provideAutoLoginUseCase(userRepository: UserRepository) = AutoLoginUseCase(userRepository)
 
 }

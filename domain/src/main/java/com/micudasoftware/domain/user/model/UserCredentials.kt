@@ -1,4 +1,4 @@
-package com.micudasoftware.data.user.datasource.model
+package com.micudasoftware.domain.user.model
 
 /**
  * Data class representing user credentials.
