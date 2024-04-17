@@ -1,8 +1,7 @@
 package com.micudasoftware.presentation.onboarding.updateaboutme
 
 import androidx.lifecycle.viewModelScope
-import com.micudasoftware.domain.user.repository.UserRepository
-import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.domain.userprofile.usecase.UpdateAboutMeUseCase
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.model.ButtonModel
@@ -20,13 +19,11 @@ import javax.inject.Inject
  * ViewModel for the UpdateAboutMe screen.
  * This ViewModel is responsible for handling user interactions and updating the UI state.
  *
- * @property userRepository Repository for user related operations.
- * @property userProfileRepository Repository for user profile related operations.
+ * @property updateAboutMe The use case for updating the about me text.
  */
 @HiltViewModel
 class UpdateAboutMeViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val userProfileRepository: UserProfileRepository,
+    private val updateAboutMeText: UpdateAboutMeUseCase,
 ): ComposeViewModel<UpdateAboutMeViewState, UpdateAboutMeEvent>() {
 
     // Mutable state flow for the view state
@@ -51,19 +48,9 @@ class UpdateAboutMeViewModel @Inject constructor(
     private fun updateAboutMe(aboutMe: String) {
         _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val userId = userRepository.getUserId()
-            if(userId == null) {
-                _viewState.update { it.copy(isLoading = false) }
-                showErrorDialog()
-                return@launch
-            }
 
-            userProfileRepository.getUserProfile(userId)
-                .chain {
-                    userProfileRepository.updateUserProfile(
-                        it.copy(aboutMeText = aboutMe)
-                    )
-                }.onSuccess {
+            updateAboutMeText(aboutMe)
+                .onSuccess {
                     // Todo navigate to feed
                 }.onError {
                     Timber.e(it.throwable, "Failed to update about me: ${it.code} - ${it.message}")

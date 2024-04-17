@@ -3,7 +3,10 @@ package com.micudasoftware.data.userprofile.di
 import com.micudasoftware.data.userprofile.api.UserProfileApi
 import com.micudasoftware.data.userprofile.datasource.UserProfileDataSource
 import com.micudasoftware.data.userprofile.repository.UserProfileRepositoryImpl
+import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.domain.userprofile.usecase.SaveUploadedProfileImagesUseCase
+import com.micudasoftware.domain.userprofile.usecase.UpdateAboutMeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,5 +28,17 @@ object UserProfileDataModule {
     @Provides
     fun provideUserProfileRepository(userProfileDataSource: UserProfileDataSource): UserProfileRepository =
         UserProfileRepositoryImpl(userProfileDataSource)
+
+    @Provides
+    fun provideSaveUploadedProfileImagesUseCase(
+        userRepository: UserRepository,
+        userProfileRepository: UserProfileRepository
+    ) = SaveUploadedProfileImagesUseCase(userRepository, userProfileRepository)
+
+    @Provides
+    fun provideUpdateAboutMeUseCase(
+        userRepository: UserRepository,
+        userProfileRepository: UserProfileRepository
+    ) = UpdateAboutMeUseCase(userRepository, userProfileRepository)
 
 }

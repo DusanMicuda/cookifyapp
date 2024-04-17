@@ -3,8 +3,7 @@ package com.micudasoftware.presentation.onboarding.uploadimages
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.micudasoftware.domain.image.repository.ImageRepository
-import com.micudasoftware.domain.user.repository.UserRepository
-import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.domain.userprofile.usecase.SaveUploadedProfileImagesUseCase
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
 import com.micudasoftware.presentation.common.model.ButtonModel
@@ -26,14 +25,12 @@ import javax.inject.Inject
  * It uses the ImageRepository to upload images.
  *
  * @property imageRepository The repository used to upload images.
- * @property userRepository The repository for user data and operations.
- * @property userProfileRepository The repository for user profile data and operations.
+ * @property saveUploadedProfileImages The use case to save the uploaded images.
  */
 @HiltViewModel
 class UploadImagesViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
-    private val userRepository: UserRepository,
-    private val userProfileRepository: UserProfileRepository,
+    private val saveUploadedProfileImages: SaveUploadedProfileImagesUseCase
 ): ComposeViewModel<SetupProfileViewState, UploadImagesEvent>() {
 
     // The current view state, represented as a MutableStateFlow. This allows the UI to observe changes to the state.
@@ -129,30 +126,17 @@ class UploadImagesViewModel @Inject constructor(
     private fun saveUploadedImages() {
         _viewState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val userId = userRepository.getUserId()
-            if (userId == null) {
-                Timber.e("User id is null")
-                _viewState.update { it.copy(isLoading = false) }
+            saveUploadedProfileImages(
+                profilePhotoUrl = profileImageUrl,
+                titlePhotoUrl = titleImageUrl,
+            ).onSuccess {
+                navigate(NavEvent.To(UpdateAboutMeScreenDestination))
+            }.onError {
+                Timber.e(it.throwable, "Failed to save images: ${it.code} - ${it.message}")
                 showErrorDialog()
-                return@launch
+            }.onFinished {
+                _viewState.update { it.copy(isLoading = false) }
             }
-
-            userProfileRepository.getUserProfile(userId)
-                .chain { userProfile ->
-                    userProfileRepository.updateUserProfile(
-                        userProfile.copy(
-                            profilePhotoUrl = profileImageUrl ?: userProfile.profilePhotoUrl,
-                            titlePhotoUrl = titleImageUrl ?: userProfile.titlePhotoUrl
-                        )
-                    )
-                }.onSuccess {
-                    navigate(NavEvent.To(UpdateAboutMeScreenDestination))
-                }.onError {
-                    Timber.e(it.throwable, "Failed to save images: ${it.code} - ${it.message}")
-                    showErrorDialog()
-                }.onFinished {
-                    _viewState.update { it.copy(isLoading = false) }
-                }
         }
     }
 

@@ -5,12 +5,13 @@ import com.micudasoftware.data.userprofile.api.UserProfileApi
 import com.micudasoftware.data.userprofile.api.dto.GetUserProfileResponseDto
 import com.micudasoftware.data.userprofile.api.dto.UpdateUserProfileRequestDto
 import com.micudasoftware.domain.common.Result
-import javax.inject.Inject
 
 /**
  * Data source for user profile operations.
+ *
+ * @property userProfileApi The API for user profile operations.
  */
-class UserProfileDataSource @Inject constructor(
+class UserProfileDataSource(
     private val userProfileApi: UserProfileApi
 ) {
 

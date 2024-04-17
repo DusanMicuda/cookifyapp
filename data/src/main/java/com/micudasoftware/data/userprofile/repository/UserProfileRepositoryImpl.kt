@@ -4,14 +4,13 @@ import com.micudasoftware.data.userprofile.datasource.UserProfileDataSource
 import com.micudasoftware.domain.common.Result
 import com.micudasoftware.domain.userprofile.model.UserProfile
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
-import javax.inject.Inject
 
 /**
  * The implementation of [UserProfileRepository].
  *
  * @property dataSource The remote user profile data source.
  */
-class UserProfileRepositoryImpl @Inject constructor(
+class UserProfileRepositoryImpl(
     private val dataSource: UserProfileDataSource,
 ): UserProfileRepository {
 
