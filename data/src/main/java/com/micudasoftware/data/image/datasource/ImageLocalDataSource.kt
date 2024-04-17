@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import com.micudasoftware.domain.common.Result
+import com.micudasoftware.domain.image.model.FileData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -51,7 +52,6 @@ class ImageLocalDataSource(
                 FileData(
                     file = file,
                     mimeType = mimeType,
-                    uri = uri
                 )
             )
         }

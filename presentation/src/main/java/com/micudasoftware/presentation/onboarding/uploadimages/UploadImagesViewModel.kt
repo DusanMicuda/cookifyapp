@@ -2,7 +2,7 @@ package com.micudasoftware.presentation.onboarding.uploadimages
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.micudasoftware.domain.image.repository.ImageRepository
+import com.micudasoftware.domain.image.usecase.UploadImageUseCase
 import com.micudasoftware.domain.userprofile.usecase.SaveUploadedProfileImagesUseCase
 import com.micudasoftware.presentation.R
 import com.micudasoftware.presentation.common.ComposeViewModel
@@ -22,14 +22,13 @@ import javax.inject.Inject
 /**
  * ViewModel for the UploadProfileImagesScreen.
  * It handles events from the UI and updates the view state accordingly.
- * It uses the ImageRepository to upload images.
  *
- * @property imageRepository The repository used to upload images.
+ * @property uploadImage The use case to upload images.
  * @property saveUploadedProfileImages The use case to save the uploaded images.
  */
 @HiltViewModel
 class UploadImagesViewModel @Inject constructor(
-    private val imageRepository: ImageRepository,
+    private val uploadImage: UploadImageUseCase,
     private val saveUploadedProfileImages: SaveUploadedProfileImagesUseCase
 ): ComposeViewModel<SetupProfileViewState, UploadImagesEvent>() {
 
@@ -68,7 +67,7 @@ class UploadImagesViewModel @Inject constructor(
     private fun uploadProfileImage(uri: Uri) {
         _viewState.update { it.copy(profilePictureState = UploadPictureState.Loading) }
         viewModelScope.launch {
-            imageRepository.uploadImage(uri.toString())
+            uploadImage(uri.toString())
                 .onSuccess { url ->
                     profileImageUrl = url
                     _viewState.update { it.copy(profilePictureState = UploadPictureState.Done(uri)) }
@@ -89,7 +88,7 @@ class UploadImagesViewModel @Inject constructor(
     private fun uploadTitleImage(uri: Uri) {
         _viewState.update { it.copy(titlePictureState = UploadPictureState.Loading) }
         viewModelScope.launch {
-            imageRepository.uploadImage(uri.toString())
+            uploadImage(uri.toString())
                 .onSuccess { url ->
                     titleImageUrl = url
                     _viewState.update { it.copy(titlePictureState = UploadPictureState.Done(uri)) }

@@ -6,6 +6,7 @@ import com.micudasoftware.data.image.datasource.ImageLocalDataSource
 import com.micudasoftware.data.image.datasource.ImageRemoteDataSource
 import com.micudasoftware.data.image.repository.ImageRepositoryImpl
 import com.micudasoftware.domain.image.repository.ImageRepository
+import com.micudasoftware.domain.image.usecase.UploadImageUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,4 +35,9 @@ object ImageDataModule {
         localDataSource: ImageLocalDataSource,
         remoteDataSource: ImageRemoteDataSource,
     ): ImageRepository = ImageRepositoryImpl(localDataSource, remoteDataSource)
+
+    @Provides
+    fun provideUploadImageUseCase(
+        imageRepository: ImageRepository
+    ) = UploadImageUseCase(imageRepository)
 }

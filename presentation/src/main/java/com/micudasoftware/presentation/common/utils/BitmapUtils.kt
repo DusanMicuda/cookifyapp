@@ -19,6 +19,7 @@ import timber.log.Timber
  * @param context The context used to access the content resolver.
  * @return The Bitmap representation of the Uri, or null if the retrieval fails.
  */
+@Suppress("DEPRECATION")
 fun Uri.getBitmapOrNull(
     context: Context,
 ): Bitmap? =

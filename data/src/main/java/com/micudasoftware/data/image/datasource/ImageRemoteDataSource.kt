@@ -4,6 +4,7 @@ import com.micudasoftware.data.common.ApiCaller
 import com.micudasoftware.data.image.api.ImageApi
 import com.micudasoftware.data.image.api.dto.UploadImageResponseDto
 import com.micudasoftware.domain.common.Result
+import com.micudasoftware.domain.image.model.FileData
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody

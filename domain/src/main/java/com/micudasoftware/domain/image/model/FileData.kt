@@ -1,6 +1,5 @@
-package com.micudasoftware.data.image.datasource
+package com.micudasoftware.domain.image.model
 
-import android.net.Uri
 import java.io.File
 
 /**
@@ -8,10 +7,8 @@ import java.io.File
  *
  * @property file The copied file to upload.
  * @property mimeType The mime type of a file.
- * @property uri The android content uri to original file.
  */
 data class FileData(
     val file: File,
     val mimeType: String,
-    val uri: Uri
 )
