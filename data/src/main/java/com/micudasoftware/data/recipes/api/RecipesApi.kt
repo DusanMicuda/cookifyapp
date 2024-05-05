@@ -9,6 +9,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * The recipes API.
@@ -16,7 +17,11 @@ import retrofit2.http.Path
 interface RecipesApi {
 
     @GET("/latestRecipes")
-    suspend fun getLatestRecipes(): Response<List<RecipeDto>>
+    suspend fun getLatestRecipes(
+        @Query("count") count: Int = 10,
+        @Query("offset") offset: Int = 0,
+        @Query("regex") regex: String? = null,
+    ): Response<List<RecipeDto>>
 
     @GET("/recipe/{recipeId}")
     suspend fun getRecipe(@Path("recipeId") recipeId: String): Response<RecipeDto>

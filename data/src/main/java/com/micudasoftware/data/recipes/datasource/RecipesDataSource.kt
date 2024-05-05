@@ -19,11 +19,18 @@ class RecipesDataSource(
     /**
      * Function to get latest recipes.
      *
+     * @param count The number of recipes to get.
+     * @param offset The offset for pagination.
+     * @param regex The regex for filtering recipes.
      * @return The [Result] with list of [RecipeDto].
      */
-    suspend fun getLatestRecipes(): Result<List<RecipeDto>> =
+    suspend fun getLatestRecipes(
+        count: Int = 10,
+        offset: Int = 0,
+        regex: String? = null
+    ): Result<List<RecipeDto>> =
         ApiCaller.callResult<List<RecipeDto>>(
-            apiCall = { recipesApi.getLatestRecipes() },
+            apiCall = { recipesApi.getLatestRecipes(count, offset, regex) },
             errorMessage = { "Failed to get latest recipes!" }
         )
 

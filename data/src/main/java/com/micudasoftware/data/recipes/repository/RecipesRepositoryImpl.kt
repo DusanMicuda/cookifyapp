@@ -15,8 +15,8 @@ class RecipesRepositoryImpl(
     private val recipesDataSource: RecipesDataSource,
 ): RecipesRepository {
 
-    override suspend fun getLatestRecipes(): Result<List<Recipe>> =
-        recipesDataSource.getLatestRecipes().map { it.toRecipes() }
+    override suspend fun getLatestRecipes(offset: Int): Result<List<Recipe>> =
+        recipesDataSource.getLatestRecipes(offset = offset).map { it.toRecipes() }
 
     override suspend fun getRecipe(recipeId: String): Result<Recipe> =
         recipesDataSource.getRecipe(recipeId).map { it.toRecipe() }

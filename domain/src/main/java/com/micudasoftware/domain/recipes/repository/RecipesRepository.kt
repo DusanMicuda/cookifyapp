@@ -11,9 +11,10 @@ interface RecipesRepository {
     /**
      * Returns the latest recipes.
      *
+     * @param offset The offset of the first recipe to return.
      * @return The [Result] containing the list of [Recipe].
      */
-    suspend fun getLatestRecipes(): Result<List<Recipe>>
+    suspend fun getLatestRecipes(offset: Int): Result<List<Recipe>>
 
     /**
      * Returns the recipe with the specified ID.
