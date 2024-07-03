@@ -20,6 +20,7 @@ hilt = "2.51"
 hilt-compose = "1.2.0"
 compose-destinations = "1.10.2"
 timber = "5.0.1"
+coil = "2.6.0"
 
 # Tests
 junit = "4.13.2"
@@ -65,6 +66,7 @@ compose-destinations-compiler = { module = "io.github.raamcosta.compose-destinat
 
 # Other
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 # Tests
 junit = { group = "junit", name = "junit", version.ref = "junit" }

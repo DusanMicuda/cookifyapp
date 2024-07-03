@@ -86,6 +86,8 @@ dependencies {
 
     // Other
     implementation(libs.timber)
+    implementation(libs.coil)
+    implementation(libs.retrofit.client)
 
     // Tests
     testImplementation(libs.junit)

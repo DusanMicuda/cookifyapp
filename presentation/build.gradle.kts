@@ -73,6 +73,7 @@ dependencies {
 
     // Other
     implementation(libs.timber)
+    implementation(libs.coil)
 
     // Tests
     testImplementation(libs.junit)

@@ -7,11 +7,12 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.micudasoftware.presentation.common.theme.CookifyAppTheme
 import com.micudasoftware.presentation.navigation.NavGraphs
-import com.micudasoftware.presentation.navigation.destinations.LoginSignUpScreenDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,17 +23,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var startScreen = LoginSignUpScreenDestination
         installSplashScreen().apply {
             setKeepOnScreenCondition { viewModel.isLoading.value }
-            setOnExitAnimationListener {
-                if (viewModel.isLoggedIn.value) {
-                    // Todo set start screen depends on result of autologin
-                }
-                it.remove()
-            }
         }
         setContent {
+            val start by viewModel.startScreen.collectAsState()
             CookifyAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -41,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
-                        startRoute = startScreen
+                        startRoute = start,
                     )
                 }
             }

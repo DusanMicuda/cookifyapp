@@ -5,6 +5,7 @@ import com.micudasoftware.data.userprofile.datasource.UserProfileDataSource
 import com.micudasoftware.data.userprofile.repository.UserProfileRepositoryImpl
 import com.micudasoftware.domain.user.repository.UserRepository
 import com.micudasoftware.domain.userprofile.repository.UserProfileRepository
+import com.micudasoftware.domain.userprofile.usecase.GetMyUserProfileUseCase
 import com.micudasoftware.domain.userprofile.usecase.SaveUploadedProfileImagesUseCase
 import com.micudasoftware.domain.userprofile.usecase.UpdateAboutMeUseCase
 import dagger.Module
@@ -40,5 +41,11 @@ object UserProfileDataModule {
         userRepository: UserRepository,
         userProfileRepository: UserProfileRepository
     ) = UpdateAboutMeUseCase(userRepository, userProfileRepository)
+
+    @Provides
+    fun provideGetMyUserProfileUseCase(
+        userRepository: UserRepository,
+        userProfileRepository: UserProfileRepository
+    ) = GetMyUserProfileUseCase(userRepository, userProfileRepository)
 
 }
